@@ -1,48 +1,67 @@
-const express = require("express")
-const Board = require("../schemas/board")
+const express = require("express");
+const Boards = require("../schemas/boards")
 const router = express.Router();
 
+router.get("/boardslist", async (req, res) => {
 
-// 게시글 작성
-router.post("/boards", async (req, res) => {    
-  const { boardId, content } = req.body;
-  
-   const Createboard = await Board.create({
-        boardId,content,
-    }
-  );     
-
-  res.json({ message: "게시글을 작성했습니다." });
-});
-
-
-/// 게시글 조회 
-router.get("/boards/:boardId", async (req,res) => {                   
-    const { boardId }= req.params;
-
-    const [board] = await Board.find({ boardId });
+    const boardslist = await Boards.find().sort({'date':-1});
+    // const boardslist = await Boards.find();
     res.json({
-         board,
-    });
-}); 
+        boardslist
+    })
+})
 
-//  게시글 수정
-router.put("/boards/:boardId", async (req, res) => {
-  const { boardId } = req.params;
-  const {content} = req.body;
+router.get("/boards/:boardsId", async (req, res) => {
+    const { boardsId } = req.params;
 
-  const boards = await Board.find({ boardId });
+    const [detail] = await Boards.find({_id: boardsId});
+    res.json({
+        detail
+    })
+})
+
+router.delete("/boards/:boardsId", async (req, res) => {
+    const { boardsId } = req.params;
+    const { password } = req.body;
     
-  res.json({success: true, message: "게시글을 수정하였습니다."});
+    const existsBoards = await Boards.find({ _id: boardsId, password: password })
+    if(!existsBoards.length){
+        res.json({ result: "fail" })
+    }else{
+        await Boards.deleteOne({ _id: boardsId });
+        res.json({ result: "success" });
+    }
+    
+})
+
+router.patch("/boards/:boardsId", async (req, res) => {
+    const { boardsId } = req.params;
+    const { title, content, password } = req.body;
+    
+    const existsBoards = await Boards.find({ _id: boardsId, password: password })
+
+    if(!existsBoards.length){
+        res.json({ result: "fail" })
+    }else{
+        await Boards.updateOne({ _id: boardsId }, { $set: { title, content } });
+        res.json({ result: "success" });
+    }
+})
+
+router.post("/boardswrite", async (req, res) =>{
+    const { title, user, password, content } = req.body;
+    // const date = new Date().toLocaleString();
+
+    const createdBoards = await Boards.create({ title: title, user: user, password: password, content: content });
+    res.json({ boards: createdBoards });
 });
 
-// 게시글 삭제
-router.delete("/boards/:boardId", async (req, res) => {
-  const { boardId } = req.params;
+// router.put("/boards/:boardsId", async (req, res) => {
+//     const { boardsId } = req.params;
+//     const { title, content } = req.body;
 
-  const boards = await Board.find({ boardId });
 
-  res.json({success: true, message: "게시글을 삭제하였습니다."});
-});
+// })
+
 
 module.exports = router;

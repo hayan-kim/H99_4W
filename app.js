@@ -1,25 +1,28 @@
-const express = require ("express"); 
-const connect = require("./schemas");
+const express = require("express");
+
+const connect = require("./schemas")          // index.js 는 생략가능함
 const app = express();
-const port = 3001;
+const port = 3000;
+
 
 connect();
 
-const boardRouter = require("./routes/boards");
+const boardsRouter = require("./routes/boards");
 
-const requestMiddleware = (req, res, next) => { 
-    console.log('Request URL:', req.originalUrl, ' - ', new Date());
+const requestMiddleware = (req, res, next) =>{
+    console.log("Request URL:", req.originalUrl, " - ", new Date());
     next();
 }
-app.use(express.json()); 
-app.use(requestMiddleware); 
 
-app.use('/api', [boardRouter]); 
+app.use(express.json());
+app.use(requestMiddleware);
 
-app.get('/', (req,res) => {     
-    res.send("블로그 시작!")
+app.use("/api", [boardsRouter]);
+
+app.get('/', (req,res) => {                 
+    res.send("Hello World")
 });
 
-app.listen(port, () => {                        
-    console.log(port, "포트로 서버가 켜졌어요!");
+app.listen(port, () => {
+    console.log(port, "포트가 서버가 켜졌어요!");
 });
