@@ -2,14 +2,17 @@ const express = require("express");
 const Boards = require("../schemas/boards")
 const router = express.Router();
 
+
+
 router.get("/boardslist", async (req, res) => {
 
     const boardslist = await Boards.find().sort({'date':-1});
-    // const boardslist = await Boards.find();
     res.json({
         boardslist
     })
 })
+
+
 
 router.get("/boards/:boardsId", async (req, res) => {
     const { boardsId } = req.params;
@@ -19,6 +22,8 @@ router.get("/boards/:boardsId", async (req, res) => {
         detail
     })
 })
+
+
 
 router.delete("/boards/:boardsId", async (req, res) => {
     const { boardsId } = req.params;
@@ -34,6 +39,8 @@ router.delete("/boards/:boardsId", async (req, res) => {
     
 })
 
+
+
 router.patch("/boards/:boardsId", async (req, res) => {
     const { boardsId } = req.params;
     const { title, content, password } = req.body;
@@ -48,20 +55,16 @@ router.patch("/boards/:boardsId", async (req, res) => {
     }
 })
 
+
+
+
 router.post("/boardswrite", async (req, res) =>{
     const { title, user, password, content } = req.body;
-    // const date = new Date().toLocaleString();
 
     const createdBoards = await Boards.create({ title: title, user: user, password: password, content: content });
     res.json({ boards: createdBoards });
 });
 
-// router.put("/boards/:boardsId", async (req, res) => {
-//     const { boardsId } = req.params;
-//     const { title, content } = req.body;
-
-
-// })
 
 
 module.exports = router;
