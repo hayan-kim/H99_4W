@@ -1,6 +1,5 @@
 const express = require("express");
-
-const connect = require("./schemas")          // index.js 는 생략가능함
+const connect = require("./schemas");          // index.js 는 생략가능함
 const app = express();
 const port = 3000;
 
@@ -8,6 +7,8 @@ const port = 3000;
 connect();
 
 const boardsRouter = require("./routes/boards");
+const { route } = require("./routes/boards");
+const router = require("./routes/boards");
 
 const requestMiddleware = (req, res, next) =>{
     console.log("Request URL:", req.originalUrl, " - ", new Date());
