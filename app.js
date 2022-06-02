@@ -7,6 +7,7 @@ const port = 3000;
 connect();
 
 const boardsRouter = require("./routes/boards");
+const usersRouter = require("./routes/users")
 const { route } = require("./routes/boards");
 const router = require("./routes/boards");
 
@@ -18,7 +19,7 @@ const requestMiddleware = (req, res, next) =>{
 app.use(express.json());
 app.use(requestMiddleware);
 
-app.use("/api", [boardsRouter]);
+app.use("/api", [boardsRouter], [usersRouter]);
 
 app.get('/', (req,res) => {                 
     res.send("Hello World")

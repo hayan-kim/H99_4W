@@ -1,8 +1,8 @@
 const express = require("express");
-const joi = require("joi");
+const Joi = require("joi");
 const jwt = require("jsonwebtoken");
-const User = require("./models/user");
-const authmiddelware = require("./middlewares/auth-middleware");
+const User = require("../models/user");
+const authmiddelware = require("../middlewares/auth-middleware");
 const router = express.Router();
 
 
@@ -79,3 +79,5 @@ router.get("/users/me", authmiddelware,  async (req, res) =>{
         },// 패스워드 안남기는 게 좋기떄문
     });
 });
+
+module.exports = router;
