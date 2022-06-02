@@ -4,7 +4,7 @@ const router = express.Router();
 
 
 
-router.get("/boardslist", async (req, res) => {
+router.get("/boards", async (req, res) => {
 
     const boardslist = await Boards.find().sort({'date':-1});
     res.json({
@@ -58,7 +58,7 @@ router.patch("/boards/:boardsId", async (req, res) => {
 
 
 
-router.post("/boardswrite", async (req, res) =>{
+router.post("/boards", async (req, res) =>{
     const { title, user, password, content } = req.body;
 
     const createdBoards = await Boards.create({ title: title, user: user, password: password, content: content });
